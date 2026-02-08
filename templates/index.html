@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lung Disease Predictor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <!-- Link to external CSS file -->
+</head>
+
+  <body style="background-image: url('static/trial1.png');background-repeat: no-repeat;background-size: cover;background-attachment: fixed;">
+
+<div class="container">
+  <h1 class="jumbotron bg-primary" style="text-align: center;background: transparent;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 50px;" ><b>AI PulmoAssist</b></h1>
+  <br><br>
+  <form class="form-horizontal" action="/" method="post" enctype="multipart/form-data" id="upload-form">
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd" >Upload X-ray Image :</label>
+      <div class="col-sm-4">          
+        <input type="file" class="form-control" placeholder="Hours Studied"  name="my_image" id="image-upload">
+      </div>
+      <div class="col-sm-6">
+        <button type="submit" class="btn btn-success" id="submit-btn">Submit</button>
+        <button type="button" class="btn btn-primary" id="lime-btn">LIME</button>
+        <button type="button" class="btn btn-info" id="grad-cam-btn">Grad CAM</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row image-container">
+    <div class="col-sm-4">
+      {% if prediction %}
+      <img id="original-image" src="{{ img_path }}" class="img-responsive">
+      <h2 id="prediction-label" style="text-align: center;"> Prediction : <i>{{ prediction }}</i> </h2>
+      {% endif %}
+    </div>
+    
+    <div class="col-sm-4">
+        <img id="lime-image" src="" class="img-responsive">
+    </div>
+    
+    <div class="col-sm-4">
+      <img id="cam-image" src="" class="img-responsive">
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#submit-btn').click(function() {
+      $('#prediction-label').show(); // Show prediction label on submit button click
+    });
+
+    $('#lime-btn').click(function() {
+      var imgPath = $('#original-image').attr('src');
+      $.ajax({
+        type: 'GET',
+        url: '/lime',
+        data: { img_path: imgPath },
+        success: function(response) {
+          $('#lime-image').attr('src', response.lime_path); // Update lime image src
+        }
+      });
+    });
+
+    $('#grad-cam-btn').click(function() {
+      var imgPath = $('#original-image').attr('src');
+      $.ajax({
+        type: 'GET',
+        url: '/grad_cam',
+        data: { img_path: imgPath },
+        success: function(response) {
+          $('#cam-image').attr('src', response.cam_path); // Update Grad-CAM image src
+        }
+      });
+    });
+  });
+</script>
+
+
+</body>
+</html>
