@@ -125,7 +125,3 @@ https://www.nature.com/articles/s41598-025-07603-4
 
 ---
 
-
-
-> ⚠️ Disclaimer:  
-This system is intended for **research and educational purposes only** and should not replace professional medical diagnosis.
